@@ -14,7 +14,8 @@ const Usuarios = connection.define("usuarios",{
     },
     email:{
         type: sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     password:{
         type: sequelize.STRING,
