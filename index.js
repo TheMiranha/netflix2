@@ -44,6 +44,6 @@ app.get("/", (req,res) => {
     res.send("Yes sir")
 });
 
-app.listen(port,(req, res) => {
+app.listen(process.env.PORT || port,(req, res) => {
     console.log("Server started")
 });
