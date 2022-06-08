@@ -49,7 +49,8 @@ app.post("/cadastrar", async (req,res) => {
         nome: nome,
         password: password
     });
-    res.send({status:true});
+    var user = await Usuarios.findOne({where: {email: email, password: password},raw: true})
+    res.send({status:generateToken(user.id)})
 });
 
 app.get("/", (req,res) => {
