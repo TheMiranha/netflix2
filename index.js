@@ -44,13 +44,18 @@ app.post("/cadastrar", async (req,res) => {
     var email = req.body.email;
     var nome = req.body.nome;
     var password = req.body.password;
-    await Usuarios.create({
-        email: email,
-        nome: nome,
-        password: password
-    });
-    var user = await Usuarios.findOne({where: {email: email, password: password},raw: true})
-    res.send({status:generateToken(user.id)})
+    var check = await Usuarios.findOne({where: {email: email}});
+    if (check == null){
+        await Usuarios.create({
+            email: email,
+            nome: nome,
+            password: password
+        });
+        var user = await Usuarios.findOne({where: {email, password},raw: true})
+        res.send({status:generateToken(user.id)})
+    }else{
+        res.send({status: false});
+    }
 });
 
 app.get("/", (req,res) => {
