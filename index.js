@@ -1,9 +1,21 @@
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const express = require("express");
 const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
 const connection = require("./database/connection");
 const Usuarios = require("./database/Usuarios");
+const generateToken = (id) => {
+    return jwt.sign({id},process.env.KEY)
+}
+const decriptToken = (token) => {
+    return jwt.verify(token,process.env.KEY,(error, decoded)=>{return decoded})
+}
+const checkToken = (token) => {
+    var decript = await decriptToken(token)
+    return decript.id != undefined ? decript.id : false
+}
 
 connection.
         authenticate()
@@ -22,7 +34,7 @@ app.post("/login", async (req,res) => {
     var password = req.body.password;
     var user = await Usuarios.findOne({where: {email: email, password: password},raw: true})
     if(user != null){
-        res.send({status: true})
+        res.send({status:generateToken(user.id)})
     }else{
         res.send({status: false})
     }
