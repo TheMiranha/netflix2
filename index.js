@@ -12,7 +12,7 @@ const generateToken = (id) => {
 const decriptToken = (token) => {
     return jwt.verify(token,process.env.KEY,(error, decoded)=>{return decoded})
 }
-const checkToken = (token) => {
+const checkToken = async (token) => {
     var decript = await decriptToken(token)
     return decript.id != undefined ? decript.id : false
 }
